@@ -21,7 +21,7 @@ const Slider = () => {
                         </div>
                     </div>
                 </div>
-                <div className="single-slider" style={{ backgroundImage: 'url("src/assets/images/slider.jpg")' }}>
+                {/* <div className="single-slider" style={{ backgroundImage: 'url("src/assets/images/slider.jpg")' }}>
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-7">
@@ -52,7 +52,7 @@ const Slider = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </section>
 

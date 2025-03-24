@@ -13,10 +13,10 @@ const ErrorPage = () => {
         return (
             <section className=" error-section">
                 <div id="error-text">
-                    <figure>
+                    <figure style={{ display: 'flex', justifyContent: 'center' }}>
                         <img
                             className="small-img"
-                            src="https://cdn.dribbble.com/users/722246/screenshots/3066818/404-page.gif"
+                            src="https://elements-resized.envatousercontent.com/elements-video-cover-images/bb14aebc-05a6-45d0-8710-25cfbe752d86/video_preview/video_preview_0000.jpg?w=500&cf_fit=cover&q=85&format=auto&s=8ca3f67c3caad7db1d794a5c5e430fbb4a3df135d51fd10127c867fd4bd25a32"
                             alt="404 page"
                         />
                     </figure>
@@ -30,9 +30,15 @@ const ErrorPage = () => {
                 {/* <NavLink to="/" className="btn">
           Go Back To HomePage
         </NavLink> */}
-                <button className="btn" onClick={handleGoBack}>
+                {/* <button className="btn btn-link" onClick={handleGoBack}>
                     Go Back
-                </button>
+                </button> */}
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <button className="btn btn-link" onClick={handleGoBack}>
+                        Go Back
+                    </button>
+                </div>
+
             </section>
         );
     }
