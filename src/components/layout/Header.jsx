@@ -32,7 +32,7 @@ const Header = () => {
     };
   }, []);
 
-
+  
   const handleLogout = async () => {
     try {
       await logOut();

@@ -2,18 +2,23 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, fetchUser } from '../../api/auth';
 import toast from 'react-hot-toast';
+import { useCSRF } from '../../hooks/useCSRF';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
+    const csrfToken = useCSRF();
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!csrfToken) {
+            toast.error('Security token missing. Please refresh the page.');
+            return;
+        }
         setIsLoading(true);
         try {
-            const response = await login(email, password);
+            const response = await login(email, password, csrfToken);
             if (response.message) {
                 toast.success('Login successful!');
                 const user = await fetchUser();
@@ -24,8 +29,7 @@ const Login = () => {
                 throw new Error('Login failed');
             }
         } catch (error) {
-            console.error('Login failed', error);
-            const errorMessage = error.response?.data?.message || error.message || 'Login failed';
+            const errorMessage = error.response?.data?.details || error.message || 'Login failed';
             toast.error(errorMessage);
         } finally {
             setIsLoading(false);

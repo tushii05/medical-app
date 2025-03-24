@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signup } from '../../api/auth';
 import toast from 'react-hot-toast';
+import { useCSRF } from '../../hooks/useCSRF';
 
 const Registration = () => {
     const [name, setName] = useState('');
@@ -9,17 +10,22 @@ const Registration = () => {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const csrfToken = useCSRF(); // Add this line
+
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        if (!csrfToken) { // Add CSRF token check
+            toast.error('Security token missing. Please refresh the page.');
+            return;
+        }
         setIsLoading(true);
 
         try {
-            await signup(name, username, password);
+            await signup(name, username, password,csrfToken);
             navigate('/login');
         } catch (error) {
-            console.error('Signup failed', error);
-            const errorMessage = error.response?.data?.message || error.message || 'Sign Up failed';
+            const errorMessage = error.response?.data?.details || error.message || 'Sign Up failed';
             toast.error(errorMessage);
 
         } finally {
@@ -96,7 +102,7 @@ const Registration = () => {
                 onMouseOut={(e) => (e.target.style.backgroundColor = '#4b4f56')}
                 disabled={isLoading}
             >
-                {isLoading ? 'Signing in...' : 'SignUp'}
+                {isLoading ? 'Signup in...' : 'SignUp'}
             </button>
             <div style={{ textAlign: 'center', marginTop: '1rem' }}>
                 <p>
