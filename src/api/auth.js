@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:3000/api';
 
 const api = axios.create({
     baseURL: API_URL,
-    // withCredentials: true,
+    withCredentials: true,
 });
 
 
@@ -14,11 +14,10 @@ export const signup = async (name, username, password, csrfToken) => {
             name,
             username,
             password
-        }, {
-            headers: { 'X-CSRF-TOKEN': csrfToken },
-            withCredentials: true,
-
-        });
+        },
+            {
+                headers: { 'X-CSRF-TOKEN': csrfToken },
+            });
         return response.data;
     } catch (error) {
         console.error('Signup failed', error.response?.data);
@@ -32,10 +31,10 @@ export const login = async (email, password, csrfToken) => {
         const response = await api.post('/login', {
             username: email,
             password
-        }, {
-            headers: { "X-CSRF-Token": csrfToken },
-            withCredentials: true,
-        });
+        },
+            {
+                headers: { "X-CSRF-Token": csrfToken }
+            });
         return response.data;
     } catch (error) {
         console.error('Login failed', error.response?.data);
@@ -67,10 +66,17 @@ export const fetchCrf = async () => {
 
 export const logOut = async () => {
     try {
-        const response = await axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
+        const csrfToken = await fetchCrf();
+        const response = await axios.post(`${API_URL}/logout`, {}, {
+            headers: {
+                "X-CSRF-Token": csrfToken.csrfToken
+            },
+            withCredentials: true
+        });
+
         return response.data;
     } catch (error) {
-        console.error('Login failed', error.response?.data);
+        console.error('Logout failed', error.response?.data || error.message);
         throw error;
     }
 };

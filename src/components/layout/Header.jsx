@@ -1,38 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logOut, fetchUser } from "../../api/auth";
+import { logOut } from "../../api/auth";
+import useSessionTimer from "../../hooks/useSessionTimer";
 
 const Header = () => {
 
   const navigate = useNavigate();
-  const [timeLeft, setTimeLeft] = useState(null);
+  const timeLeft = useSessionTimer();
 
-  useEffect(() => {
-    let interval;
-
-    const getSessionExpiry = async () => {
-      try {
-        const res = await fetchUser();
-        const expiresAt = res.sessionExpiresAt;
-        const updateTime = () => {
-          const remainingTime = expiresAt - Date.now();
-          setTimeLeft(remainingTime > 0 ? remainingTime : 0);
-        };
-        updateTime();
-        interval = setInterval(updateTime, 1000);
-      } catch (error) {
-        console.error("Error fetching session time", error);
-      }
-    };
-
-    getSessionExpiry();
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, []);
-
-  
   const handleLogout = async () => {
     try {
       await logOut();

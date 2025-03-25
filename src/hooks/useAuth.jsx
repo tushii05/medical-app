@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/api';
+import { fetchUser } from '../api/auth';
 
 const useAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,9 +8,8 @@ const useAuth = () => {
     useEffect(() => {
         const checkAuthentication = async () => {
             try {
-                const response = await axios.get(`${API_URL}/userDetails`, { withCredentials: true });
-                console.log(response)
-                if (response.data) {
+                const res = await fetchUser();
+                if (res) {
                     setIsAuthenticated(true);
                 } else {
                     setIsAuthenticated(false);
