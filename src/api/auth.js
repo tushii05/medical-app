@@ -26,7 +26,6 @@ export const signup = async (name, username, password, csrfToken) => {
 };
 
 export const login = async (email, password, csrfToken) => {
-    console.log('email, password, csrfToken', email, password, csrfToken)
     try {
         const response = await api.post('/login', {
             username: email,
